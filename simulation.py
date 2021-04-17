@@ -79,4 +79,3 @@ while len(people)<100000 and len(people) > 1:
     peoplevalues.append(len(people))
     foodvalues.append(food)
 
-print('hello world')
