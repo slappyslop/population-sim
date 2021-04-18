@@ -15,8 +15,8 @@ fertilityy = 40
 fertilitychance = 20
 people = []
 year =1 
-foodvalues = []
-peoplevalues = []
+foodvalues = [food]
+peoplevalues = [startingPopulation]
 
 
 
@@ -32,12 +32,10 @@ def harvest():
     for person in people:
         if person.age>8:
             ablepeople +=1
-    print(ablepeople, "able people")
     
     global food
 
     food +=(ablepeople*productivity)
-    print(food, "after hravesting")
     if food<len(people):
         del people[0:int(len(people)-food)]
         food = 0
@@ -60,15 +58,12 @@ def beginSim():
 
 def runYear():
     harvest()
-    print(food, "food after eating")
     reproduce()
-    print(len(people), "after reproduction")
     for person in people:
         if person.age > 80:
             people.remove(person)
         else:
             person.age +=1
-    print(len(people), "after old age")
 
 
 beginSim()
@@ -79,3 +74,8 @@ while len(people)<100000 and len(people) > 1:
     peoplevalues.append(len(people))
     foodvalues.append(food)
 
+file = open("data.csv", 'w+')
+writer = csv.writer(file)
+for w in range(len(peoplevalues)):
+    writer.writerow([peoplevalues[w], foodvalues[w]])
+file.close()
