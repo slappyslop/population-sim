@@ -13,6 +13,7 @@ class Blob:
         self.location = location
         self.nourishment = 5
         self.isReproducing = 0
+        self.oldlocation = []
 
     def checkreproducing(self):
         if self.nourishment >= 8:
@@ -28,7 +29,8 @@ class Blob:
 
     def move(self):
         
-        self.oldlocation = self.location
+        self.oldlocation.append(self.location[0])
+        self.oldlocation.append(self.location[1])
         self.location[0]+=  random.randint(-1, 1)
         self.location[1]+= random.randint(-1, 1)
         while self.location not in locations:
@@ -38,7 +40,7 @@ class Blob:
     
         if self.location == self.oldlocation:
             pass
-        elif numpy.subtract(self.location, self.oldlocation) in [(1,1), (1, -1),(-1, 1), (-1, -1)]:
+        elif numpy.subtract(self.location, self.oldlocation) in [[1,1], [1, -1],[-1, 1], [-1, -1]]:
                     self.nourishment -= 2
         else:
             self.nourishment -=1
@@ -63,7 +65,7 @@ def initialize(foodmax, totalblobs, totalplaces):
         blobs.append(Blob(random.randint(0, 5), 0, location = [random.randint(0, totalplaces[0]-1), random.randint(0, totalplaces[1]-1)]))
         i+=1
 
-initialize (1, 1, (2,2))
+initialize (1, 1, [2,2])
 for i in range(10):
     for blob in blobs:
         print(str(blob.location[0]) + str(blob.location[1]) + "before move")
