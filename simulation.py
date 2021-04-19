@@ -32,7 +32,7 @@ class Blob:
         self.location[0]+=  random.randint(-1, 1)
         self.location[1]+= random.randint(-1, 1)
         while self.location not in locations:
-            self.location == self.oldlocation
+            self.location = self.oldlocation
             self.location[0]+= random.randint(-1, 1)
             self.location[1]+= random.randint(-1, 1)
     
