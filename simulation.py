@@ -13,7 +13,7 @@ class Blob:
         self.location = location
         self.nourishment = 5
         self.isReproducing = 0
-        self.oldlocation = []
+        self.oldlocation = tuple(location)
 
     def checkreproducing(self):
         if self.nourishment >= 8:
@@ -28,23 +28,20 @@ class Blob:
                     self.nourishment = 10
 
     def move(self):
-        
-        self.oldlocation.append(self.location[0])
-        self.oldlocation.append(self.location[1])
         self.location[0]+=  random.randint(-1, 1)
         self.location[1]+= random.randint(-1, 1)
         while self.location not in locations:
-            self.location = self.oldlocation
+            self.location = list(self.oldlocation)
             self.location[0]+= random.randint(-1, 1)
             self.location[1]+= random.randint(-1, 1)
-    
-        if self.location == self.oldlocation:
-            pass
-        elif numpy.subtract(self.location, self.oldlocation) in [[1,1], [1, -1],[-1, 1], [-1, -1]]:
+        temp = numpy.subtract(self.location, self.oldlocation)   
+        if temp.all() == [0,0]:
+            return None
+        elif temp.all() in [[1,1], [1, -1],[-1, 1], [-1, -1]]:
                     self.nourishment -= 2
         else:
             self.nourishment -=1
-            
+        self.oldlocation = (tuple(self.location))     
 
 
 
@@ -56,7 +53,7 @@ class Place:
 def initialize(foodmax, totalblobs, totalplaces):
     for x in range(totalplaces[0]):
         for y in range(totalplaces[1]):
-            places.append(Place(random.randint(0, int(foodmax)), (int(x), int(y))))
+            places.append(Place(random.randint(0, int(foodmax)), [int(x), int(y)]))
             y+=1
         x+=1
     for place in places:
@@ -66,11 +63,11 @@ def initialize(foodmax, totalblobs, totalplaces):
         i+=1
 
 initialize (1, 1, [2,2])
-for i in range(10):
+for i in range(3):
     for blob in blobs:
-        print(str(blob.location[0]) + str(blob.location[1]) + "before move")
+        print(str(blob.location[0]) + ', '+ str(blob.location[1]) + "before move")
         print(str(blob.nourishment) + "nourishment before move")
         blob.move()
-        print(str(blob.location[0]) + str(blob.location[1])+ "after move")
-        print(blob.nourishment + "after move")
+        print(str(blob.location[0]) + ', '+str(blob.location[1])+ "after move")
+        print(str(blob.nourishment) + "after move")
         
