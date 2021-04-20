@@ -47,7 +47,7 @@ class Blob:
             self.nourishment -= 2
         else:
             self.nourishment -= 1
-        self.oldlocation = (tuple(self.location))
+        self.oldlocation = tuple(self.location)
 
 
     def die(self):
@@ -82,13 +82,16 @@ def initialize(foodmax, totalblobs, totalplaces, time):
     for i in range(totalblobs):
         blobs.append(Blob(random.randint(0, 5), 0,
                      location=list(random.choice(locations))))
-        i += 1
+        
 
 def reproduce():
     for blob in blobs:
         if blob.isReproducing == 1:
             blob.isReproducing = 0
-            blobs.append(Blob(0, 0, location=blob.location))
+            if blob.location in locations:
+                blobs.append(Blob(0, 0, location=blob.location))
+            else:
+                blobs.append(Blob(0, 0, list(random.choice(locations))))
 
 
 def run(foodmax, totalblobs, totalplaces, time):
@@ -98,8 +101,9 @@ def run(foodmax, totalblobs, totalplaces, time):
             for blob in blobs:
                 print("blob at" + str(blob.location))
                 blob.feed()
-                blob.checkreproducing()
                 blob.move()
+                blob.checkreproducing()
+                #blob.move()
                 print("blob moved to " + str(blob.location))
                 blob.age += 1
                 blob.die()
@@ -109,9 +113,10 @@ def run(foodmax, totalblobs, totalplaces, time):
             blobslist.append(len(blobs))
             print("\n\n")
             print(i)
+        print("simulation done")
     except PopulationDied:
         pass
        
 
-run(10, 1, (1, 1), 100)
+run(10000000, 100000, (1, 1), 100)
 print(blobslist)
