@@ -1,11 +1,15 @@
 import random
 import numpy
+import matplotlib
+import matplotlib.pyplot as plt
 places = []
 blobs = []
 locations = []
 blobslist = []
 
-class PopulationDied(Exception): pass
+
+class PopulationDied(Exception):
+    pass
 
 
 class Blob:
@@ -49,18 +53,15 @@ class Blob:
             self.nourishment -= 1
         self.oldlocation = tuple(self.location)
 
-
     def die(self):
         a = blobs.index(self)
-        if self.age >= 6 or self.nourishment<=1:
-            if len(blobs)>1:
+        if self.age >= 6 or self.nourishment <= 1:
+            if len(blobs) > 1:
                 del(blobs[a])
                 print("blob has died")
             else:
-                print ("population died")
-                raise  PopulationDied
-
-            
+                print("population died")
+                raise PopulationDied
 
 
 class Place:
@@ -82,7 +83,7 @@ def initialize(foodmax, totalblobs, totalplaces, time):
     for i in range(totalblobs):
         blobs.append(Blob(random.randint(0, 5), 0,
                      location=list(random.choice(locations))))
-        
+
 
 def reproduce():
     for blob in blobs:
@@ -103,7 +104,6 @@ def run(foodmax, totalblobs, totalplaces, time):
                 blob.feed()
                 blob.move()
                 blob.checkreproducing()
-                #blob.move()
                 print("blob moved to " + str(blob.location))
                 blob.age += 1
                 blob.die()
@@ -116,7 +116,13 @@ def run(foodmax, totalblobs, totalplaces, time):
         print("simulation done")
     except PopulationDied:
         pass
-       
 
-run(10000000, 100000, (1, 1), 100)
-print(blobslist)
+
+def plot():
+    blobsarray = numpy.array(blobslist)
+    plt.plot(blobsarray)
+    plt.show()
+
+
+run(10000, 1, (1, 1), 100)
+plot()
