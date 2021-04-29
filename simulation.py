@@ -126,6 +126,7 @@ def reproduce(totalplaces):
                         a = a.tolist()
                         if places[locations.index(tuple(a))].isOccupied == 0:
                             blobs.append(Blob(0, 0, location=(a)))
+                            blob.isReproducing = 0
                         else:
                             temp.remove(tem)
                     except ValueError:
