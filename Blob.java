@@ -25,9 +25,12 @@ class Blob {
     
 }
 
- class blobex{
+ class World{
+        
+    Place places[][];
+    Blob blobs[]; 
 
-    static void initialize(int dim, int initial_pop){  //Takes in initial population and dimension of plane, spits out a list of blob objects and place objects 
+    void initialize(int dim, int initial_pop){  //Takes in initial population and dimension of plane, spits out a list of blob objects and place objects 
 
         Random rand = new Random();
         Place places[][] = new Place[dim][dim];
@@ -47,16 +50,19 @@ class Blob {
                 places[possible_location[0]][possible_location[1]].isOccupied = true;
                 i++;
             }
-            else continue;                
+            else continue;                  
 
         } 
 
     } 
 
     public static void main(String args[]){
-        initialize(10, 10);
-       
-        
-    
+        World world = new World();
+        world.initialize(10, 10);
+        for (Place k[] : world.places){
+            System.out.print(k);
+
+        }
+          
     }
-}
+}   
