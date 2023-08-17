@@ -1,68 +1,54 @@
 package Simulation;
-import java.util.Random;
+
 class Blob {
     // beings in the program
     int age, nourishment;
-    boolean canReproduce;
+    boolean canReproduce, isHungry, willDie, isSuffocated; 
     int location[] = new int[2];
-
+    boolean[][] posArr = new boolean[3][3];
     Blob(int age, int [] locations){
         this.age = age;
         nourishment = 8; 
         this.location = locations;
                 
     }
-
-    boolean checkReproducing(){
-        if (nourishment>7){
-            nourishment -= 5;
-            return true;
-        }
-        else return false;
-    }
-
-
-    
-}
-
- class World{
+    //updates eating and reproduction thresholds
+    void updateFlags(){ 
+        canReproduce = nourishment>7?true:false;
+        isHungry = nourishment<10?true:false;
+        willDie = nourishment==0?true:false;
         
-    Place places[][];
-    Blob blobs[]; 
-
-    void initialize(int dim, int initial_pop){  //Takes in initial population and dimension of plane, spits out a list of blob objects and place objects 
-
-        Random rand = new Random();
-        Place places[][] = new Place[dim][dim];
-        Blob blobs[] = new Blob[initial_pop]; 
-        int i, j = 0;
-
-        for (i=0;i<dim;i++){    // Initalizes a list of place objects who's index corresponds to its position
-            for (j=0;j<dim; j++){
-                int[] position = {i, j};
-                places[i][j] = new Place(rand.nextInt(6), position);
-            }
-        }
-        for (i=0;i<initial_pop;){ // initalizes a list of blobs
-            int possible_location[] = {rand.nextInt(dim), rand.nextInt(dim)};
-            if (!places[possible_location[0]][possible_location[1]].isOccupied){ // checks if possible locations are occupied, if not, then tries again
-                blobs[i] = new Blob(0, possible_location);
-                places[possible_location[0]][possible_location[1]].isOccupied = true;
-                i++;
-            }
-            else continue;                  
-
-        } 
-
-    } 
-
-    public static void main(String args[]){
-        World world = new World();
-        world.initialize(10, 10);
-        for (Place k[] : world.places){
-            System.out.print(k);
-
-        }
-          
     }
-}   
+
+    void build_posArr(){ // Fills a 2 dimensional array where true is a place that the blob can move, and the middle element is the current positon of the blob
+        posArr[1][1] = false;
+        for (int x = -1; x<2; x++){
+            for(int y = -1; y<2; y++){
+                try{
+                    posArr[1+x][1+y] = !World.places[location[0]+x][location[1]+y].isOccupied;
+                }catch(IndexOutOfBoundsException e){
+                     posArr[1+x][1+y] = false;
+                }
+
+            }
+        }  
+        
+    }
+    
+    void feed(){
+        if (World.places[location[0]][location[1]].food>0 && isHungry){
+            World.places[location[0]][location[1]].food -=1;
+            nourishment = 10;
+        }
+    }
+
+    void reproduce(){
+        if (canReproduce ){
+        nourishment -= 5;
+        
+        }
+
+
+
+    }
+}
